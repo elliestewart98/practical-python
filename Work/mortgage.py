@@ -23,8 +23,9 @@ while principal > 0:
             principal = principal * (1+rate/12) - payment
             total_paid = total_paid + payment
             N_months +=1
+    #This uses fstrings
+    result = f'{N_months} months with a total paid £{total_paid:0.2f} and principal £{principal:0.2f}'
+    print(result)
     
-    print(N_months, round(total_paid,7), round(principal,7))
-
 print('Total paid', round(total_paid,7))
 print('Months' , N_months)
