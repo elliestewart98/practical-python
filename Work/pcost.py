@@ -6,24 +6,28 @@
 # purchase all of the shares in the portfolio.
 # Should print out: Total cost 44671.15
 import csv
-with open('Data/portfolio.csv', 'rt') as f:
-    #this reads in the first line and means you can skip the column headers
-    headers = next(f)
-    name = []
-    shares = []
-    prices = []
-    print(f)
-    readLines = csv.reader(f, delimiter = ',')
-    for line in readLines:
-        name.append(line[0])
-        shares.append(float(line[1]))
-        prices.append(float(line[2]))
 
+def portfolio_cost(filename):  
+    with open(filename, 'rt') as f:
+        #this reads in the first line and means you can skip the column headers
+        headers = next(f)
+        name = []
+        shares = []
+        prices = []
+        print(f)
+        rows = csv.reader(f, delimiter = ',')
+        for column in rows:
+            name.append(column[0])
+            shares.append(float(column[1]))
+            prices.append(float(column[2]))
+            print(column)
     
-    share_prices = []
-    for i in range(len(shares)):
-        share_prices.append(shares[i]*prices[i])
-    print('\nTotal Cost', sum(share_prices))
+        
+        share_prices = []
+        for i in range(len(shares)):
+            share_prices.append(shares[i]*prices[i])
+        return(sum(share_prices))
         
 
-
+cost = portfolio_cost('Data/portfolio.csv')
+print('Total cost:', cost)
