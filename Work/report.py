@@ -47,5 +47,62 @@ for s in portfolio:
 
 print(total)
 
+#This prints it out clearly with one dictionary on each line
 from pprint import pprint
 pprint(portfolio)
+
+# Function that reads a set of prices such as prices.csv into
+# a dictionary where the keys are stock names and values are stock
+# prices. 
+"""
+def read_prices(filename):
+    stock = []
+    with open(filename, 'rt') as f:
+        rows = csv.reader(f)
+        headers = next(rows)
+        try:
+            for row in rows:
+                portfolio_dict = {}
+                portfolio_dict[row[0]] = row[1]
+                stock.append(portfolio_dict)
+    return stock
+"""
+def read_prices(filename):
+    '''
+    Read a CSV file of price data into a dict mapping names to prices.
+    '''
+    prices = {}
+    with open(filename) as f:
+        rows = csv.reader(f)
+        for row in rows:
+            try:
+                prices[row[0]] = float(row[1])
+            except IndexError:
+                pass
+
+    return prices
+
+
+prices = read_prices('Data/prices.csv')
+print(prices['IBM'])
+print(prices['MSFT'])
+
+#Compute the current value of the portfolio along with the gain/loss
+
+for stock in portfolio:
+    name = stock['name']
+    share = stock['shares']
+    share_price = stock['price']
+    stock_price = prices[name]
+    difference = stock_price - share_price
+    current_value = share * stock_price
+    profit = share * difference
+    print("Name: " + name + " Current value: " + str(current_value)
+          +" Gain/loss: " + str(profit))
+    
+
+
+
+
+
+
