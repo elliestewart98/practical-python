@@ -223,18 +223,64 @@ def parse_csv_5(filename, select=None, types=None, has_headers=True, delimiter='
             records.append(record)
 
         return records
-
+"""
 prices_fail = parse_csv_5('Data/prices.csv',
                         select=['name','price'],
                         has_headers=False)
-
+"""
 # Modify the function to catch all ValueError exceptions
 # generated during record creation and print a warning
 # message for rows that cant be converted. 
 
+def parse_csv_6(filename, select=None, types=None, has_headers=True, delimiter=','):
+    '''
+    Parse a CSV file into a list of records with type conversion.
+    '''
+    with open(filename) as f:
+        rows = csv.reader(f, delimiter=delimiter)
 
+        if select and (has_headers == False):
+            raise RuntimeError('Cannot select headers if there are none.')
+        
+        # Read the file headers (if any)
+        headers = next(rows) if has_headers else []
 
+        # If specific columns have been selected, make indices for filtering 
+        if select:
+            indices = [ headers.index(colname) for colname in select ]
+            headers = select
 
+        records = []
+        row_number = 0
+        for row in rows:
+            if not row:     # Skip rows with no data
+                continue
+
+            # If specific column indices are selected, pick them out
+            if select:
+                row = [ row[index] for index in indices]
+                row_number +=1
+
+            # Apply type conversion to the row
+            if types:
+                try:
+                    row = [func(val) for func, val in zip(types, row)]
+                    row_number +=1
+                except ValueError as e:
+                    print
+                    print('Row',row_number,': Couldnt convert ', row )
+                    print(e)
+            # Make a dictionary or a tuple
+            if headers:
+                record = dict(zip(headers, row))
+            else:
+                record = tuple(row)
+            records.append(record)
+
+        return records
+
+print('\n ------- \n ValueError check: \n ')
+portfolio = parse_csv_6('Data/missing.csv', types=[str, int, float])
 
 
 
