@@ -51,6 +51,45 @@ print(total)
 from pprint import pprint
 pprint(portfolio)
 
+def read_portfolio(filename):
+    '''
+    Read a stock portfolio file into a list of dictionaries with keys
+    name, shares, and price.
+    '''
+    portfolio = []
+    with open(filename) as f:
+        rows = csv.reader(f)
+        headers = next(rows)
+        for row in rows:
+            record = dict(zip(headers, row))
+            stock = {
+                'name' : record['name'],
+                'shares' : int(record['shares']),
+                'price' : float(record['price'])
+            }
+            portfolio.append(stock)
+    return portfolio
+
+portfolio = read_portfolio('Data/portfolio.csv')
+print(portfolio)
+print(portfolio[1]['shares'])
+total = 0.0
+for s in portfolio:
+    total += s['shares']*s['price']
+
+print(total)
+
+
+
+
+
+
+
+
+
+
+
+
 # Function that reads a set of prices such as prices.csv into
 # a dictionary where the keys are stock names and values are stock
 # prices. 
@@ -127,8 +166,61 @@ for r in report:
 """   
 # Or you can expand the values and use fstrings
 # This aligns them all evenly by decimal point
-for name, shares, price, change in report:
-    print(f'{name:>10s} {shares:>10d} {price:>10.2f} {change:>10.2f}')
+
+def print_report(report):
+    headers = ('Name', 'Shares', 'Price', 'Change')
+    print('%10s %10s %10s %10s' % headers)
+    print(('-' * 10 + ' ') * len(headers))
+    dollar = '$'
+    """
+    for name, shares, price, change in report:
+        print(f'{name:>10s} {shares:>10d} {price:>10.2f} {change:>10.2f}')
+    """
+    #This includes the dollar sign
+    for name, shares, price, change in report:
+        price = dollar + str(price)
+        print(f'{name:>10s} {shares:>10d} {price:>10s} {change:>10.2f}')
+
+print_report(report)
+
+from collections import Counter
+holdings = Counter()
+for s in portfolio:
+    holdings[s['name']] += s['shares']
+print(holdings)
+print(holdings.most_common(3))
+
+portfolio2 = read_portfolio('Data/portfolio2.csv')
+holdings2 = Counter()
+for s in portfolio2:
+    holdings2[s['name']] += s['shares']
+    
+combined = holdings + holdings2
+print(combined)
 
 
+f = open('Data/portfoliodate.csv')
+rows = csv.reader(f)
+headers = next(rows)
+print(headers)
+select = ['name', 'shares', 'price']
+indices = [headers.index(colname) for colname in select ]
+print(indices)
+row = next(rows)
+record = {colname: row[index] for colname, index in zip(select,indices)}
+print(record)
 
+portfolio = [{colname: row[index] for colname, index in zip(select, indices)} for row in rows]
+print(portfolio)
+
+
+types = [str, int , float]
+print('\n----\n')
+f = open('Data/dowstocks.csv')
+rows = csv.reader(f)
+headers = next(rows)
+row = next(rows)
+types = [str,float,str,str,float,float,float,float,int]
+converted = [func(val) for func,val in zip(types,row)]
+record = dict(zip(headers,converted))
+print(record)
