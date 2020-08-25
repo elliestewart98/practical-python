@@ -51,6 +51,8 @@ print(total)
 from pprint import pprint
 pprint(portfolio)
 
+from fileparse import parse_csv
+"""
 def read_portfolio(filename):
     '''
     Read a stock portfolio file into a list of dictionaries with keys
@@ -69,6 +71,17 @@ def read_portfolio(filename):
             }
             portfolio.append(stock)
     return portfolio
+"""
+
+#use imported function parse_csv()
+def read_portfolio(filename):
+    '''
+    Read a stock portfolio file into a list of dictionaries with keys
+    name, shares, and price.
+    '''
+    portfolio = parse_csv(filename)
+    return portfolio
+
 
 portfolio = read_portfolio('Data/portfolio.csv')
 print(portfolio)
@@ -105,7 +118,7 @@ def read_prices(filename):
                 portfolio_dict[row[0]] = row[1]
                 stock.append(portfolio_dict)
     return stock
-"""
+
 def read_prices(filename):
     '''
     Read a CSV file of price data into a dict mapping names to prices.
@@ -119,6 +132,14 @@ def read_prices(filename):
             except IndexError:
                 pass
 
+    return prices
+"""
+#parse_csv version
+def read_prices(filename):
+    '''
+    Read a CSV file of price data into a dict mapping names to prices.
+    '''
+    prices = parse_csv(filename, has_headers = False)
     return prices
 
 

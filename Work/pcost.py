@@ -27,12 +27,12 @@ def portfolio_cost(filename):
         for i in range(len(shares)):
             share_prices.append(shares[i]*prices[i])
         return(sum(share_prices))
-"""       
+
+
 #Given solution
 def portfolio_cost(filename):
     '''Computes the total cost (shares*price) of a portfolio file'''
     total_cost = 0.0
-
     with open(filename, 'rt') as f:
         rows = csv.reader(f)
         headers = next(rows)
@@ -41,7 +41,16 @@ def portfolio_cost(filename):
             price = float(row[2])
             total_cost += nshares * price
     return total_cost
+"""
 
+
+import report
+def portfolio_cost(filename):
+    '''
+    Computes the total cost (shares*price) of a portfolio file
+    '''
+    portfolio = report.read_portfolio(filename)
+    return sum([s.cost() for s in portfolio])
 
 cost = portfolio_cost('Data/portfolio.csv')
 print('Total cost:', cost)

@@ -280,10 +280,10 @@ def parse_csv_6(filename, select=None, types=None, has_headers=True, delimiter='
         return records
 
 print('\n ------- \n ValueError check: \n ')
-#portfolio = parse_csv_6('Data/missing.csv', types=[str, int, float])
+portfolio = parse_csv_6('Data/missing.csv', types=[str, int, float])
 
 #Silence error messages
-def parse_csv_7(filename, select=None, types=None, has_headers=True, delimiter=',', silence_errors = False):
+def parse_csv(filename, select=None, types=None, has_headers=True, delimiter=',', silence_errors = False):
     '''
     Parse a CSV file into a list of records with type conversion.
     '''
